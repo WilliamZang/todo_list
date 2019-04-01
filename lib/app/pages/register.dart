@@ -1,28 +1,52 @@
-import 'package:flutter/material.dart';
-import 'package:todo_list/app/pages/register.dart';
+import 'dart:io';
 
-class LoginPage extends StatefulWidget {
+import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
+
+class RegisterPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => LoginState();
+  State<StatefulWidget> createState() => RegisterState();
 }
 
-class LoginState extends State<LoginPage> {
+class RegisterState extends State<RegisterPage> {
+  File _image;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
-  
+
+
+  _getImage() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    
+    setState(() {
+      _image = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final logo = CircleAvatar(
       backgroundColor: Colors.transparent,
       radius: 48.0,
-      child: Image.asset('images/flutter.png'),
+      backgroundImage: AssetImage('images/flutter.png'),
+    );
+    
+    final avatar = FlatButton(
+      onPressed: () => { _getImage() },
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: 48,
+        backgroundImage: _image == null ? AssetImage(
+          'images/default.jpeg',
+        ) : FileImage(_image),
+      ),
     );
 
     final email = TextFormField(
@@ -43,21 +67,18 @@ class LoginState extends State<LoginPage> {
       ),
     );
 
-    final loginButton = FlatButton(
-      onPressed: () {
-        print(emailController.text);
-        print(passwordController.text);
-      },
+    final cancelButon = FlatButton(
+      onPressed: () => { Navigator.of(context).pop() },
       child: Column(
         children: <Widget>[
-          Image.asset('images/register.png', width: 50, height: 50),
-          Text('登录', style: TextStyle(color: Colors.black)),
+          Image.asset('images/x.png', width: 50, height: 50),
+          Text('取消', style: TextStyle(color: Colors.black)),
         ],
       ),
     );
 
     final registerButton = FlatButton(
-      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterPage() )),
+      onPressed: () => {},
       child: Column(
         children: <Widget>[
           Image.asset('images/login.png', width: 50, height: 50),
@@ -76,6 +97,13 @@ class LoginState extends State<LoginPage> {
             SizedBox(height: 10),
             Text('TodoList', style: TextStyle(fontSize: 24)),
             SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('头像:', style: TextStyle(fontSize: 20)),
+                avatar,
+              ],
+            ),
             Padding(
               padding: EdgeInsets.only(left: 24, right: 24),
               child: email,
@@ -88,8 +116,8 @@ class LoginState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                children: <Widget>[
+                 cancelButon,
                  registerButton,
-                 loginButton,
                ],
             )
           ],
