@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../components/profile_image_component.dart';
+import 'user_grid_list_page.dart';
+
 class TodoListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => TodoListState();
@@ -13,13 +16,25 @@ class TodoListState extends State<TodoListPage> {
         title: Text('ToDoList'),
 //        leading: Text(''),
         actions: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () {},
-            ),
-          )
+          ProfileImage(
+            NetworkImage(
+                'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3882265467,3924971696&fm=27&gp=0.jpg'),
+            Size(kBottomNavigationBarHeight, kBottomNavigationBarHeight),
+            onTapAction: () {
+              Route route =
+                  MaterialPageRoute(builder: (context) => UserGridListPage());
+              Navigator.push(context, route);
+            },
+          ),
+//          Container(
+//            padding: const EdgeInsets.all(8.0),
+//            child: IconButton(
+//              icon: Icon(Icons.account_circle),
+//              onPressed: () {
+//
+//              },
+//            ),
+//          )
         ],
       ),
       body: Center(
@@ -32,20 +47,12 @@ class TodoListState extends State<TodoListPage> {
               return _buildRow();
             }),
       ),
-      persistentFooterButtons: <FloatingActionButton>[
-        FloatingActionButton(
-          heroTag: "Add",
-          onPressed: () {},
-          tooltip: 'Add',
-          child: Icon(Icons.add),
-        ),
-        FloatingActionButton(
-          heroTag: "Sub",
-          onPressed: () {},
-          tooltip: 'Sub',
-          child: Icon(Icons.remove),
-        ),
-      ],
+      floatingActionButton: FloatingActionButton(
+        heroTag: "Add",
+        onPressed: () {},
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
     );
   }
 
