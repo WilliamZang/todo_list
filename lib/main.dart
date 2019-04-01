@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/app/pages/login.dart';
+import 'package:todo_list/app/pages/register.dart';
 import 'package:todo_list/framework/bloc/bloc.dart';
 import 'package:todo_list/framework/pages/todo_list_page.dart';
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider(TestBloc(),
-          child: MyHomePage(title: 'Flutter Demo Home Page')),
+      child: LoginPage()),
     );
   }
 }
