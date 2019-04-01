@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/framework/bloc/bloc.dart';
+import 'package:todo_list/framework/pages/todo_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,14 +19,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider(TestBloc(),
@@ -60,20 +53,6 @@ class MyHomePage extends StatelessWidget {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
@@ -92,14 +71,19 @@ class MyHomePage extends StatelessWidget {
       ),
       persistentFooterButtons: <FloatingActionButton>[
         FloatingActionButton(
+          heroTag: "btn1",
           onPressed: () {
-            TestBloc bloc = BlocProvider.of<TestBloc>(context);
-            bloc.dispatch(1);
+            Route route =
+                MaterialPageRoute(builder: (context) => TodoListPage());
+            Navigator.push(context, route);
+//            TestBloc bloc = BlocProvider.of<TestBloc>(context);
+//            bloc.dispatch(1);
           },
           tooltip: 'Add',
           child: Icon(Icons.add),
         ),
         FloatingActionButton(
+          heroTag: "btn2",
           onPressed: () {
             TestBloc bloc = BlocProvider.of<TestBloc>(context);
             bloc.dispatch(-1);
