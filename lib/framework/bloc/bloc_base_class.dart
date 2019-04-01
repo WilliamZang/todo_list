@@ -2,10 +2,10 @@ import 'dart:async';
 
 abstract class Bloc<E, S> {
   Bloc(this._lastState) : _eventStreamController = StreamController<E>() {
-    _mergedStateStream = _eventStreamController.stream
+    _stateStream = _eventStreamController.stream
         .asyncExpand(_handleEvent)
         .asBroadcastStream();
-    _stateSubscription = _mergedStateStream.listen((S newState) {
+    _stateSubscription = _stateStream.listen((S newState) {
       _lastState = newState;
     });
   }
@@ -21,7 +21,7 @@ abstract class Bloc<E, S> {
 
   Stream<S> get stateStream async* {
     yield _lastState;
-    yield* _mergedStateStream;
+    yield* _stateStream;
   }
 
   Stream<S> handleEvent(E event, {S lastState});
@@ -32,7 +32,7 @@ abstract class Bloc<E, S> {
 
   S _lastState;
   final StreamController<E> _eventStreamController;
-  Stream<S> _mergedStateStream;
+  Stream<S> _stateStream;
   StreamSubscription<S> _stateSubscription;
 }
 
