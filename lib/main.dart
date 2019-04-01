@@ -4,7 +4,7 @@ import 'package:todo_list/framework/bloc/bloc.dart';
 void main() => runApp(MyApp());
 
 class TestBloc extends Bloc<int, int> {
-  TestBloc(): super(0);
+  TestBloc() : super(0);
   @override
   Stream<int> handleEvent(int event, {int lastState}) async* {
     yield event + lastState;
@@ -79,37 +79,35 @@ class MyHomePage extends StatelessWidget {
             Text(
               'You have pushed the button this many times:',
             ),
-            BlocBuilder(bloc: BlocProvider.of<TestBloc>(context),
-            builder: (BuildContext context, int counter) {
-              return Text(
-                '$counter',
-                style: Theme.of(context).textTheme.display1,
-              );
-            }),
-
-
+            BlocBuilder(
+                bloc: BlocProvider.of<TestBloc>(context),
+                builder: (BuildContext context, int counter) {
+                  return Text(
+                    '$counter',
+                    style: Theme.of(context).textTheme.display1,
+                  );
+                }),
           ],
         ),
       ),
-        persistentFooterButtons: <FloatingActionButton>[
-          FloatingActionButton(
-            onPressed: () {
-              TestBloc bloc = BlocProvider.of<TestBloc>(context);
-              bloc.dispatch(1);
-            },
-            tooltip: 'Add',
-            child: Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              TestBloc bloc = BlocProvider.of<TestBloc>(context);
-              bloc.dispatch(-1);
-            },
-            tooltip: 'Sub',
-            child: Icon(Icons.remove),
-          ),
-        ],
-
+      persistentFooterButtons: <FloatingActionButton>[
+        FloatingActionButton(
+          onPressed: () {
+            TestBloc bloc = BlocProvider.of<TestBloc>(context);
+            bloc.dispatch(1);
+          },
+          tooltip: 'Add',
+          child: Icon(Icons.add),
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            TestBloc bloc = BlocProvider.of<TestBloc>(context);
+            bloc.dispatch(-1);
+          },
+          tooltip: 'Sub',
+          child: Icon(Icons.remove),
+        ),
+      ],
     );
   }
 }
