@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/app/pages/register.dart';
+import 'package:todo_list/framework/pages/todo_list_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,6 +48,8 @@ class LoginState extends State<LoginPage> {
       onPressed: () {
         print(emailController.text);
         print(passwordController.text);
+        // TODO: 网络请求
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListPage()));
       },
       child: Column(
         children: <Widget>[

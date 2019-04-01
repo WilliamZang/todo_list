@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:todo_list/framework/pages/todo_list_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -78,7 +79,9 @@ class RegisterState extends State<RegisterPage> {
     );
 
     final registerButton = FlatButton(
-      onPressed: () => {},
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListPage()));
+      },
       child: Column(
         children: <Widget>[
           Image.asset('images/login.png', width: 50, height: 50),
