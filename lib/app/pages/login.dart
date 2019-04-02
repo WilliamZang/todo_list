@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/app/pages/register.dart';
 import 'package:todo_list/framework/pages/todo_list_page.dart';
+import 'package:todo_list/main.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => LoginState();
-}
-
-class LoginState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-  
+
   @override
   Widget build(BuildContext context) {
     final logo = CircleAvatar(
@@ -49,7 +38,9 @@ class LoginState extends State<LoginPage> {
         print(emailController.text);
         print(passwordController.text);
         // TODO: 网络请求
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListPage()));
+        MyProvider.of(context).dispatch(
+            LoginActionEvent(emailController.text, passwordController.text));
+        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => TodoListPage()));
       },
       child: Column(
         children: <Widget>[
@@ -60,7 +51,8 @@ class LoginState extends State<LoginPage> {
     );
 
     final registerButton = FlatButton(
-      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterPage() )),
+      onPressed: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => RegisterPage())),
       child: Column(
         children: <Widget>[
           Image.asset('images/login.png', width: 50, height: 50),
@@ -72,32 +64,48 @@ class LoginState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            logo,
-            SizedBox(height: 10),
-            Text('TodoList', style: TextStyle(fontSize: 24)),
-            SizedBox(height: 40),
-            Padding(
-              padding: EdgeInsets.only(left: 24, right: 24),
-              child: email,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 24, right: 24),
-              child: password,
-            ),
-            SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-               children: <Widget>[
-                 registerButton,
-                 loginButton,
-               ],
-            )
-          ],
-        )
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          logo,
+          SizedBox(height: 10),
+//          StreamBuilder(
+//            stream: MyProvider.of(context).loginState,
+//            builder: (BuildContext context, AsyncSnapshot<bool> state) {
+//              return Text('${state.hasData && state.data ? '已登录' : '未登录'}',
+//                  style: TextStyle(fontSize: 24));
+//            },
+//          ),
+//          StreamBuilder(
+//            stream: MyProvider.of(context).loginUsername,
+//            builder: (BuildContext context, AsyncSnapshot<String> state) {
+//              String name = "请登录";
+//              if (state.hasData) {
+//                name = state.data;
+//              }
+//              return Text(name,
+//                  style: TextStyle(fontSize: 24));
+//            },
+//          ),
+          SizedBox(height: 40),
+          Padding(
+            padding: EdgeInsets.only(left: 24, right: 24),
+            child: email,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 24, right: 24),
+            child: password,
+          ),
+          SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              registerButton,
+              loginButton,
+            ],
+          )
+        ],
+      )),
     );
   }
 }
