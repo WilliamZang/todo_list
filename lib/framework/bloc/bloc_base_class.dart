@@ -1,28 +1,50 @@
 import 'dart:async';
+import 'package:rxdart/rxdart.dart';
+
+enum BlocMode {
+  Switch,
+  Merge,
+  Concat,
+}
 
 abstract class Bloc<E, S> {
-  Bloc(this._lastState) : _eventStreamController = StreamController<E>() {
-    _stateStream = _eventStreamController.stream
-        .asyncExpand(_handleEvent)
-        .asBroadcastStream();
+  Bloc(this._lastState, [BlocMode mode = BlocMode.Concat]) {
+    switch (mode) {
+      case BlocMode.Merge:
+        _stateStream = _eventSubject.flatMap(_handleEvent);
+        break;
+      case BlocMode.Concat:
+        _stateStream = _eventSubject.concatMap(_handleEvent);
+        break;
+      case BlocMode.Switch:
+        _stateStream = _eventSubject.switchMap(_handleEvent);
+        break;
+    }
+
     _stateSubscription = _stateStream.listen((S newState) {
       _lastState = newState;
     });
   }
 
   dispatch(E event) {
-    _eventStreamController.sink.add(event);
+    _eventSubject.add(event);
   }
 
   dispose() {
-    _eventStreamController.close();
+    _eventSubject.close();
     _stateSubscription.cancel();
   }
 
-  Stream<S> get stateStream async* {
-    yield _lastState;
-    yield* _stateStream;
-  }
+  Stream<S> get stateStream => _stateStream.startWith(_lastState);
+
+//  Stream<S> get _stateStream {
+//    StreamController controller = StreamController();
+//    controller.sink.add(_lastState); // yield _lastState;
+//    _stateStream.listen((S state) {
+//      controller.sink.add(state);
+//    });
+//    return controller.stream;
+//  }
 
   Stream<S> handleEvent(E event, {S lastState});
 
@@ -31,8 +53,9 @@ abstract class Bloc<E, S> {
   }
 
   S _lastState;
-  final StreamController<E> _eventStreamController;
-  Stream<S> _stateStream;
+  final Subject<E> _eventSubject = PublishSubject();
+
+  Observable<S> _stateStream;
   StreamSubscription<S> _stateSubscription;
 }
 

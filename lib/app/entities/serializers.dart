@@ -1,15 +1,21 @@
 library serializers;
 
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/serializer.dart';
 import 'todo.dart';
 import 'user.dart';
 
-part 'serializers.g.dart';
+abstract class JSONSerializable {
+  dynamic toJSON();
+}
 
-@SerializersFor(const [
-  Todo,
-  User,
-])
+typedef JSONSerializable JSONSerializeFunction(Map<String, dynamic> json);
 
-final Serializers serializers = _$serializers;
+class JSONSerializes {
+  Map<Type, JSONSerializeFunction> _serializeMap = {
+    Todo: (Map m) => Todo.fromJSON(m),
+  };
+  T fromJSON<T extends JSONSerializable>(Map<String, dynamic> json) {
+    return _serializeMap[T](json) as T;
+  }
+}
+
+final JSONSerializes jsonSerializes = JSONSerializes();

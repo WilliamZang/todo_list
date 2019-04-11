@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/app/blocs/todoLIstBloc.dart';
+import 'package:todo_list/app/entities/entities.dart';
+import 'package:todo_list/framework/bloc/bloc.dart';
 
 import '../components/profile_image_component.dart';
 import 'user_grid_list_page.dart';
@@ -38,14 +41,17 @@ class TodoListState extends State<TodoListPage> {
         ],
       ),
       body: Center(
-        child: ListView.separated(
+        child: BlocBuilder(bloc: BlocProvider.of<TodoListBloc>(context),
+        builder: (BuildContext context, List<Todo> todos) {
+         return ListView.separated(
             separatorBuilder: (BuildContext context, int index) {
               return Divider();
             },
-            itemCount: 50,
+            itemCount: todos.length,
             itemBuilder: (BuildContext context, int index) {
-              return _buildRow();
-            }),
+              return _buildRow(todos[index]);
+            });
+        },
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: "Add",
@@ -56,7 +62,7 @@ class TodoListState extends State<TodoListPage> {
     );
   }
 
-  Widget _buildRow() {
+  Widget _buildRow(Todo todo) {
     Widget titleRow = Row(
       children: <Widget>[
         Checkbox(
